@@ -17,7 +17,11 @@ type User struct {
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Pinged your deployment. You successfully connected to MongoDB!"))
+	_, err := w.Write([]byte("Pinged your deployment. You successfully connected to MongoDB!"))
+	if err != nil {
+		http.Error(w, "Error while writing response", http.StatusInternalServerError)
+		fmt.Println(err)
+	}
 }
 
 func AddUser(w http.ResponseWriter, r *http.Request) {
@@ -36,14 +40,26 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	result, err := models.UsersCollection.InsertOne(context.TODO(), userDoc)
 	if err != nil {
 		http.Error(w, "Error while insertion", http.StatusInternalServerError)
-		panic(err)
+		fmt.Println(err)
 	}
 
-	// Response
-	_, err = w.Write([]byte(fmt.Sprintf("%v", result.InsertedID)))
+	// Marshal the response to JSON
+	jsonResponse, err := json.Marshal(map[string]interface{}{
+		"user_id": result.InsertedID,
+	})
+	if err != nil {
+		http.Error(w, "Error while marshaling response", http.StatusInternalServerError)
+		fmt.Println(err)
+	}
+
+	// Set the content type and write the response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+
+	_, err = w.Write(jsonResponse)
 	if err != nil {
 		http.Error(w, "Error while writing response", http.StatusInternalServerError)
-		panic(err)
+		fmt.Println(err)
 	}
 }
 
@@ -76,14 +92,27 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	result, err := models.UsersCollection.UpdateOne(context.TODO(), filter, updatedQuery)
 	if err != nil {
 		http.Error(w, "Error while updating", http.StatusInternalServerError)
-		panic(err)
+		fmt.Println(err)
 	}
 
-	// Response
-	_, err = w.Write([]byte(fmt.Sprintf("%v %v", result.ModifiedCount, ID)))
+	// Marshal the response to JSON
+	jsonResponse, err := json.Marshal(map[string]interface{}{
+		"modified_count": result.ModifiedCount,
+		"user_id":        ID,
+	})
+	if err != nil {
+		http.Error(w, "Error while marshaling response", http.StatusInternalServerError)
+		fmt.Println(err)
+	}
+
+	// Set the content type and write the response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	_, err = w.Write(jsonResponse)
 	if err != nil {
 		http.Error(w, "Error while writing response", http.StatusInternalServerError)
-		panic(err)
+		fmt.Println(err)
 	}
 }
 
@@ -103,13 +132,26 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	result, err := models.UsersCollection.DeleteOne(context.TODO(), filter)
 	if err != nil {
 		http.Error(w, "Error while deleting", http.StatusInternalServerError)
-		panic(err)
+		fmt.Println(err)
 	}
 
-	// Response
-	_, err = w.Write([]byte(fmt.Sprintf("%v %v", result.DeletedCount, ID)))
+	// Marshal the response to JSON
+	jsonResponse, err := json.Marshal(map[string]interface{}{
+		"deleted_count": result.DeletedCount,
+		"user_id":       ID,
+	})
+	if err != nil {
+		http.Error(w, "Error while marshaling response", http.StatusInternalServerError)
+		fmt.Println(err)
+	}
+
+	// Set the content type and write the response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	_, err = w.Write(jsonResponse)
 	if err != nil {
 		http.Error(w, "Error while writing response", http.StatusInternalServerError)
-		panic(err)
+		fmt.Println(err)
 	}
 }
