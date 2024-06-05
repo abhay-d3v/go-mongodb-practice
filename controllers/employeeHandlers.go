@@ -41,6 +41,7 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error while insertion", http.StatusInternalServerError)
 		fmt.Println(err)
+		return
 	}
 
 	// Marshal the response to JSON
@@ -50,6 +51,7 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error while marshaling response", http.StatusInternalServerError)
 		fmt.Println(err)
+		return
 	}
 
 	// Set the content type and write the response
@@ -60,6 +62,7 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error while writing response", http.StatusInternalServerError)
 		fmt.Println(err)
+		return
 	}
 }
 
@@ -93,6 +96,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error while updating", http.StatusInternalServerError)
 		fmt.Println(err)
+		return
 	}
 
 	// Marshal the response to JSON
@@ -103,6 +107,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error while marshaling response", http.StatusInternalServerError)
 		fmt.Println(err)
+		return
 	}
 
 	// Set the content type and write the response
@@ -113,6 +118,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error while writing response", http.StatusInternalServerError)
 		fmt.Println(err)
+		return
 	}
 }
 
@@ -133,6 +139,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error while deleting", http.StatusInternalServerError)
 		fmt.Println(err)
+		return
 	}
 
 	// Marshal the response to JSON
@@ -143,6 +150,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error while marshaling response", http.StatusInternalServerError)
 		fmt.Println(err)
+		return
 	}
 
 	// Set the content type and write the response
@@ -153,5 +161,6 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error while writing response", http.StatusInternalServerError)
 		fmt.Println(err)
+		return
 	}
 }
